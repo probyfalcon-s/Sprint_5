@@ -1,17 +1,20 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
+from src.data import TEST_DATA
+from config.config import BASE_URL
+from locators.locators import Locators
 
-driver = webdriver.Chrome()
-driver.get("https://stellarburgers.nomoreparties.site")
+class TestNavigationToAccount:
+    def test_move_personal_account_true(self, driver):
+        driver.get(BASE_URL)
 
-driver.find_element(By.XPATH, "//p[text()='Личный Кабинет']").click()
+        driver.find_element(*Locators.BUTTON_ACCOUNT).click()
 
-driver.find_element(By.XPATH, "//input[@name='name']").send_keys("alexeysokolov13987@yandex.ru")
-driver.find_element(By.XPATH, "//input[@name='Пароль']").send_keys("dBAn]C")
-driver.find_element(By.XPATH, "//button[@class='button_button__33qZ0 button_button_type_primary__1O7Bx button_button_size_medium__3zxIa'] ").click()
+        driver.find_element(*Locators.INPUT_EMAIL_LOGIN).send_keys(TEST_DATA['login'])
+        driver.find_element(*Locators.INPUT_PASSWORD).send_keys(TEST_DATA['password'])
+        driver.find_element(*Locators.BUTTON_LOGIN).click()
 
-WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located((By.XPATH, "//button[text()='Оформить заказ']")))
+        WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located((Locators.BUTTON_ORDER)))
 
-driver.find_element(By.XPATH, "//p[text()='Личный Кабинет']").click()
+        section_header = driver.find_element(*Locators.BUTTON_ORDER)
+        assert section_header.is_displayed()

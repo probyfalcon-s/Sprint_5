@@ -2,7 +2,7 @@ import random
 
 import pytest
 import string
-from selenium import webdriver
+
 
 @pytest.fixture
 def generate_password():
@@ -25,11 +25,5 @@ def generate_login():
 
     return generate_logins
 
-
-@pytest.fixture(scope="function")
-def driver():
-    driver = webdriver.Chrome()
-    yield driver
-    driver.quit()
-
-
+# def REGISTER_URL():
+#     return None
